@@ -23,11 +23,12 @@ const CustomerLoginPage = ({ setLoggedInCustomer }) => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/request-otp", {
+      const res = await axios.post("https://myfinacebackend.onrender.com/api/auth/request-otp", {
         name,
         mobileNumber: mobile,
       });
 
+      // Use backend-generated OTP (for dev)
       setGeneratedOtp(res.data.otp);
       setStep(2);
       alert(`🔐 OTP sent to ${mobile}: ${res.data.otp}`);
@@ -45,20 +46,14 @@ const CustomerLoginPage = ({ setLoggedInCustomer }) => {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/verify-otp", {
+      const res = await axios.post("https://myfinacebackend.onrender.com/api/auth/verify-otp", {
         name,
         mobileNumber: mobile,
         otp,
       });
 
-      const customer = res.data.customer;
-      setLoggedInCustomer(customer);
-
-      if (customer.isHost) {
-        navigate("/dashboard");
-      } else {
-        navigate(`/user/${customer.aadhaar}`);
-      }
+      setLoggedInCustomer(res.data.customer);
+      navigate(`/user/${res.data.customer.aadhaar}`);
     } catch (err) {
       console.error(err);
       setError("Verification failed. Please try again.");

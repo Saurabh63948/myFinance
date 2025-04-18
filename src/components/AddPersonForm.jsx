@@ -59,7 +59,7 @@ const AddPersonForm = ({ onAddPerson }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post("http://localhost:5000/api/customers", newPerson, {
+      const res = await axios.post("https://myfinacebackend.onrender.com/api/customers", newPerson, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
